@@ -1,12 +1,34 @@
+using Microsoft.EntityFrameworkCore;
+using RealEstateMediaPlatform.API.Data;
+using RealEstateMediaPlatform.API.Configurations;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Swagger
+// MongoDb
+var mongoSettings = builder.Configuration
+    .GetSection("MongoDb")
+    .Get<MongoDbSettings>();
+
+builder.Services.AddSingleton<IMongoClient>(_ =>
+    new MongoClient(mongoSettings.ConnectionString));
+
+builder.Services.AddScoped(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+    return client.GetDatabase(mongoSettings.Database);
+});
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("SqlServer")
+    ));
+    
 var app = builder.Build();
 
-// ✅ 启用 Swagger UI
+// Swagger UI
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -14,26 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// 测试接口
-app.MapGet("/weatherforecast", () =>
-{
-    var summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-        "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        });
-
-    return forecast;
-});
 
 app.MapGet("/", () => "API is running");
 
