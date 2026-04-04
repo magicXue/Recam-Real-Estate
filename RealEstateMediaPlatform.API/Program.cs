@@ -25,7 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("SqlServer")
     ));
-    
+builder.Services.AddScoped<ListingCaseHistoryRepository>();    
 var app = builder.Build();
 
 // Swagger UI
