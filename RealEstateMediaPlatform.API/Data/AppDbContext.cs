@@ -18,4 +18,5 @@ public class AppDbContext : DbContext
             .Property(p => p.Price)
             .HasPrecision(18, 2);
     }
+    public DbSet<ListingCase> ListingCases { get; set; }
 }
