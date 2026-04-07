@@ -19,4 +19,10 @@ public class AppDbContext : DbContext
             .HasPrecision(18, 2);
     }
     public DbSet<ListingCase> ListingCases { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<StatusHistory> StatusHistories { get; set; }
+
+    public DbSet<Agent> Agents { get; set; }
+
+    public DbSet<MediaAsset> MediaAssets { get; set; }
 }
