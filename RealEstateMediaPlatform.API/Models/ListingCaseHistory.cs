@@ -10,11 +10,11 @@ public class ListingCaseHistory
 
     public int ListingCaseId { get; set; }
 
-    public string Action { get; set; } = default!; // Created / Updated / Deleted
+    public string Action { get; set; }
 
     public string? PerformedBy { get; set; }
 
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    public DateTime Timestamp { get; set; }
 
     public string? DataSnapshot { get; set; } 
 }
