@@ -2,22 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using RealEstateMediaPlatform.API.Data;
 using RealEstateMediaPlatform.API.Configurations;
 using MongoDB.Driver;
+using RealEstateMediaPlatform.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // MongoDb
-var mongoSettings = builder.Configuration
-    .GetSection("MongoDb")
-    .Get<MongoDbSettings>();
-
-builder.Services.AddSingleton<IMongoClient>(_ =>
-    new MongoClient(mongoSettings.ConnectionString));
-
-builder.Services.AddScoped(sp =>
-{
-    var client = sp.GetRequiredService<IMongoClient>();
-    return client.GetDatabase(mongoSettings.Database);
-});
+builder.Services.AddMongo(builder.Configuration);
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
