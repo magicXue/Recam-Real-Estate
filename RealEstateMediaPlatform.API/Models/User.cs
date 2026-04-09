@@ -1,19 +1,14 @@
 using System;
+using Microsoft.AspNetCore.Identity;
 using RealEstateMediaPlatform.API.Models.Enums;
 
 namespace RealEstateMediaPlatform.API.Models;
 
-public class User
+public class User : IdentityUser<int>
 {
-    public int Id { get; set; }
+    public string FullName { get; set; }
 
-    public string Username { get; set; }
-
-    public string Email { get; set; }
-
-    public string Password { get; set; }
-
-    public UserRole Role { get; set; }
+    public UserRole Role { get; set; }  = UserRole.Agent;
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 }

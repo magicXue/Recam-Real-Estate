@@ -29,6 +29,8 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Repositories\Base\" />
+    <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
 
 </Project>

@@ -22,6 +22,12 @@ namespace RealEstateMediaPlatform.API.Extensions
             services.AddSingleton<IMongoClient>(_ =>
                 new MongoClient(settings.ConnectionString));
 
+            services.AddSingleton<IMongoDatabase>(sp =>
+            {
+                var client = sp.GetRequiredService<IMongoClient>();
+                return client.GetDatabase(settings.Database);
+            });
+
             services.AddSingleton<MongoDbContext>();
 
             return services;
