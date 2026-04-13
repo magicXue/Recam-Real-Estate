@@ -16,5 +16,6 @@ public class ListingCaseHistory
 
     public DateTime Timestamp { get; set; }
 
-    public string? DataSnapshot { get; set; } 
+    public string? DataSnapshot { get; set; }
+    public DateTime CreatedAt { get; internal set; }
 }

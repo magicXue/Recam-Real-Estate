@@ -20,5 +20,5 @@ public class ListingCase
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-
+    public string AgentId { get; internal set; }
 }

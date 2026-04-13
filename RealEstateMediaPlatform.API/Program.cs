@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstateMediaPlatform.API.Data;
-using RealEstateMediaPlatform.API.Configurations;
-using MongoDB.Driver;
 using RealEstateMediaPlatform.API.Extensions;
 using RealEstateMediaPlatform.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using RealEstateMediaPlatform.API.Services;
 
 async Task SeedRolesAsync(IServiceProvider serviceProvider)
 {
@@ -54,7 +54,35 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("SqlServer")
     ));
-builder.Services.AddScoped<ListingCaseHistoryRepository>();    
+builder.Services.AddScoped<ListingCaseHistoryRepository>();   
+builder.Services.AddAutoMapper(typeof(Program)); 
+builder.Services.AddScoped<ListingCaseService>();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "请输入: token"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {

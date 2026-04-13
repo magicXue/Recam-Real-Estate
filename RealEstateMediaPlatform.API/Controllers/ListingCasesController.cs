@@ -18,13 +18,30 @@ public class ListingCasesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    public async Task<IActionResult> Create(CreateListingCaseDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateListingCaseDto dto)
     {
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        await _service.CreateAsync(dto, userId);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
 
-        return Ok();
+        var listingId = await _service.CreateAsync(dto, userId);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = listingId },
+            new { id = listingId }
+        );
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var result = await _service.GetByIdAsync(id);
+
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
     }
 }
