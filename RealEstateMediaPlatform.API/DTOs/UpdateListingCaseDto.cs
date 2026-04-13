@@ -1,7 +1,10 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using RealEstateMediaPlatform.API.Models;
+
 namespace RealEstateMediaPlatform.API.DTOs;
-public class CreateListingCaseDto
+
+public class UpdateListingCaseDto
 {
     [Required]
     [MaxLength(255)]

@@ -1,3 +1,5 @@
+using RealEstateMediaPlatform.API.Models;
+
 namespace RealEstateMediaPlatform.API.DTOs;
 
 public class ListingCaseDto
@@ -9,7 +11,7 @@ public class ListingCaseDto
 
     public int Bedrooms { get; set; }
     public decimal? Price { get; set; }
-
+    public PropertyStatus Status { get; set; }
     public string AgentId { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
 }

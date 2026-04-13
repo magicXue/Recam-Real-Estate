@@ -44,4 +44,59 @@ public class ListingCasesController : ControllerBase
 
         return Ok(result);
     }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        var result = await _service.GetAllAsync(userId!);
+
+        return Ok(result);
+    }
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateListingCaseDto dto)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var success = await _service.UpdateAsync(id, dto, userId);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var success = await _service.DeleteAsync(id, userId);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
+    [HttpPatch("{id}/property-status")]
+    public async Task<IActionResult> UpdatePropertyStatus(int id, [FromBody] UpdatePropertyStatusDto dto)
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized();
+
+        var success = await _service.UpdatePropertyStatusAsync(id, dto.PropertyStatus, userId);
+
+        if (!success)
+            return NotFound();
+
+        return NoContent();
+    }
 }
